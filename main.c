@@ -35,7 +35,9 @@ int main() {
     struct Node *head = NULL;
     struct Node *currNode = NULL;
 
-    while ((letter = fgetc(file)) != EOF) {
+    letter = fgetc(file);
+
+    while (letter != EOF) {
 
         //NEW LINE IDENTIFIER
         if (letter == '\n') {
@@ -51,23 +53,28 @@ int main() {
                 strcpy(newNode->word, "LEFTPAR");
                 newNode->colNum = colNum;
                 newNode->lineNum = lineNum;
-            } else if (letter == ')') {
+            }
+            else if (letter == ')') {
                 strcpy(newNode->word, "RIGHTPAR");
                 newNode->colNum = colNum;
                 newNode->lineNum = lineNum;
-            } else if (letter == '[') {
+            }
+            else if (letter == '[') {
                 strcpy(newNode->word, "LEFTSQUAREB");
                 newNode->colNum = colNum;
                 newNode->lineNum = lineNum;
-            } else if (letter == ']') {
+            }
+            else if (letter == ']') {
                 strcpy(newNode->word, "RIGHTSQUAREB");
                 newNode->colNum = colNum;
                 newNode->lineNum = lineNum;
-            } else if (letter == '{') {
+            }
+            else if (letter == '{') {
                 strcpy(newNode->word, "LEFTCURLYB");
                 newNode->colNum = colNum;
                 newNode->lineNum = lineNum;
-            } else if (letter == '}') {
+            }
+            else if (letter == '}') {
                 strcpy(newNode->word, "RIGHTCURLYB");
                 newNode->colNum = colNum;
                 newNode->lineNum = lineNum;
@@ -102,7 +109,9 @@ int main() {
                     iteration++;
                 }
                 else {
+                    tempWord[i] = letter;
                     i++;
+                    tempWord[i] = '\0';
                     iteration++;
                     printf("LEXICAL ERROR [%d:%d]: Invalid token '%s'", lineNum, colNum, tempWord);
                     exit(1);
@@ -136,6 +145,16 @@ int main() {
                 newNode->colNum = colNum;
                 newNode->lineNum = lineNum;
             }
+            else if(strcmp(tempWord, "true") == 0){
+                strcpy(newNode->word, "BOOLEAN");
+                newNode->colNum = colNum;
+                newNode->lineNum = lineNum;
+            }
+            else if(strcmp(tempWord, "false") == 0){
+                strcpy(newNode->word, "BOOLEAN");
+                newNode->colNum = colNum;
+                newNode->lineNum = lineNum;
+            }
             else {
                 strcpy(newNode->word, "IDENTIFIER");
                 newNode->colNum = colNum;
@@ -151,6 +170,7 @@ int main() {
                 currNode = newNode;
             }
             colNum += iteration;
+            continue;
         }
 
 
@@ -158,9 +178,8 @@ int main() {
 
 
 
-
-
         colNum++;
+        letter = fgetc(file);
     }
 
 
