@@ -173,6 +173,136 @@ int main() {
             continue;
         }
 
+        //CHAR DAHA ERROR KISIMLARI YAPILMADI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        else if(letter == '\''){
+            struct Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+            int iteration = 0;
+            while ((letter = fgetc(file)) != EOF){
+                iteration++;
+                if(letter == '\''){
+                    strcpy(newNode->word, "CHAR");
+                    newNode->colNum = colNum;
+                    newNode->lineNum = lineNum;
+                    break;
+                }
+
+            }
+            newNode->next = NULL;
+
+            if (head == NULL) {
+                head = newNode;
+                currNode = newNode;
+            } else {
+                currNode->next = newNode;
+                currNode = newNode;
+            }
+            colNum += iteration;
+        }
+
+        //STRING DAHA ERROR KISIMLARI YAPILMADI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        else if(letter == '\"'){
+            struct Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+            int iteration = 0;
+            while ((letter = fgetc(file)) != EOF){
+                iteration++;
+                if(letter == '\"'){
+                    strcpy(newNode->word, "STRING");
+                    newNode->colNum = colNum;
+                    newNode->lineNum = lineNum;
+                    break;
+                }
+
+            }
+            newNode->next = NULL;
+
+            if (head == NULL) {
+                head = newNode;
+                currNode = newNode;
+            } else {
+                currNode->next = newNode;
+                currNode = newNode;
+            }
+            colNum += iteration;
+        }
+
+            //NUMBERS
+        else if(letter == '-' || letter == '+' || (letter >= '0' && letter <= '9')){
+            struct Node *newNode = (struct Node *) malloc(sizeof(struct Node));
+            char tempWord[20];
+            tempWord[0] = letter;
+            int iteration = 1;
+            int i = 1;
+            if(letter == '+' || letter == '-'){
+                while (((letter = fgetc(file)) != EOF) && (letter != ' ' && letter != '(' && letter != ')' && letter != '[' && letter != ']' && letter != '{' && letter != '}' && letter != '\n' && letter != '\t' && letter != '\r')) {
+                    if ((letter >= '0' && letter <= '9') || letter == '.') {
+                        tempWord[i] = letter;
+                        i++;
+                        iteration++;
+                    }
+                    else {
+                        tempWord[i] = letter;
+                        i++;
+                        tempWord[i] = '\0';
+                        iteration++;
+                        printf("LEXICAL ERROR [%d:%d]: Invalid token '%s'", lineNum, colNum, tempWord);
+                        exit(1);
+                    }
+                }
+                strcpy(newNode->word, "NUMBER");
+                newNode->colNum = colNum;
+                newNode->lineNum = lineNum;
+                continue;
+            }
+            else if(letter == '0'){
+                letter = fgetc(file);
+                iteration++;
+                if(letter == 'x'){
+
+                }
+                else if(letter == 'b'){
+
+                }
+                else{
+                    while ((letter != EOF) && (letter != ' ' && letter != '(' && letter != ')' && letter != '[' && letter != ']' && letter != '{' && letter != '}' && letter != '\n' && letter != '\t' && letter != '\r')) {
+                        if ((letter >= '0' && letter <= '9') || letter == '.') {
+                            tempWord[i] = letter;
+                            i++;
+                            iteration++;
+                            letter = fgetc(file);
+                        }
+                        else {
+                            tempWord[i] = letter;
+                            i++;
+                            tempWord[i] = '\0';
+                            iteration++;
+                            printf("LEXICAL ERROR [%d:%d]: Invalid token '%s'", lineNum, colNum, tempWord);
+                            exit(1);
+                        }
+                    }
+                    strcpy(newNode->word, "NUMBER");
+                    newNode->colNum = colNum;
+                    newNode->lineNum = lineNum;
+                    continue;
+                }
+            }
+            else{
+
+            }
+
+            newNode->next = NULL;
+
+            if (head == NULL) {
+                head = newNode;
+                currNode = newNode;
+            }
+            else {
+                currNode->next = newNode;
+                currNode = newNode;
+            }
+            colNum += iteration;
+        }
+
+
 
 
 
